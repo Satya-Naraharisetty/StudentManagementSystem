@@ -43,4 +43,20 @@ public class StudentServiceImpl implements StudentService{
 		studentRepository.deleteById(id);	
 	}
 
+	@Override
+	public List<Student> searchStudentsByEmailId(String keyword) {
+    	if (keyword != null && !keyword.isEmpty()) {
+        	return studentRepository.findByEmailContainingIgnoreCase(keyword);
+    	}
+    	return studentRepository.findAll();
+	}
+
+	@Override
+	public List<Student> searchStudentsByFirstName(String keyword) {
+		if (keyword != null && !keyword.isEmpty()) {
+        	return studentRepository.findByFirstNameContainingIgnoreCase(keyword);
+    	}
+    	return studentRepository.findAll();
+	}
+
 }

@@ -2,13 +2,12 @@ package com.sbproj.sms.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import com.sbproj.sms.entity.Student;
 import com.sbproj.sms.service.StudentService;
+
+import java.util.List;
 
 @Controller
 public class StudentController {
@@ -72,6 +71,22 @@ public class StudentController {
 	public String deleteStudent(@PathVariable Long id) {
 		studentService.deleteStudentById(id);
 		return "redirect:/students";
+	}
+
+	// handler method to handle search student request
+
+	@GetMapping("/students/search")
+	public String searchStudents(@RequestParam("keyword") String keyword, Model model) {
+		List<Student> students = null;
+		if (keyword.contains("@")) {
+			students = studentService.searchStudentsByEmailId(keyword);
+		}
+		else {
+			students = studentService.searchStudentsByFirstName(keyword);
+		}
+    	model.addAttribute("students", students);
+    	model.addAttribute("keyword", keyword);
+    	return "students";
 	}
 	
 }
